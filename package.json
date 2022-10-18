@@ -5,6 +5,12 @@
   "private": false,
   "license": "MIT",
   "main": "lib/element-lowcode-v1.common.js",
+  "files": [
+    "dist",
+    "node_modules",
+    "public",
+    "src"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -12,7 +18,8 @@
     "lib": "vue-cli-service build --target lib --name element-lowcode-v1 --dest lib packages/index.js"
   },
   "repository": {
-    
+    "type": "git",
+    "directory": "https://github.com/Amos-F/element-lowcode-v1"
   },
   "dependencies": {
     "core-js": "^3.6.5",
