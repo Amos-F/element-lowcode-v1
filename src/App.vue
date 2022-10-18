@@ -2,6 +2,9 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="" style="max-width:600px;margin:0 auto;">
+      <lc-form :list-data="[{prop:'test',label:'测试'}]" :form-data="{test:''}"></lc-form>
+    </div>
   </div>
 </template>
 
