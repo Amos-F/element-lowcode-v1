@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --dest dist",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name element-lowcode-v1 --dest lib packages/index.js"
   },

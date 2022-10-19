@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col-center common-form">
-    <el-form class="w00" :model="searchForm" ref="commonForm" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
+    <el-form class="w100" :model="searchForm" ref="commonForm" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
       <div class="group" v-for="(groupItem,groupIndex) in listData" :key="groupIndex" :class="customClass">
         <span class="u-font-26 font-500" v-text="groupItem.title"></span>
         <div class="group-child">
@@ -339,6 +339,9 @@ export default {
 
 <style scoped>
 @import "../../lc.css";
+.group{
+  
+}
 .input-change ::v-deep .el-input__inner {
   padding-right: 46px;
 }
