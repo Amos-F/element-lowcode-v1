@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col-center common-form">
-    <el-form class="w100" :model="searchForm" ref="commonForm" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
+    <el-form :model="searchForm" ref="commonForm" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
       <div class="group" v-for="(groupItem,groupIndex) in listData" :key="groupIndex" :class="customClass">
         <span class="u-font-26 font-500" v-text="groupItem.title"></span>
         <div class="group-child">
@@ -26,13 +26,13 @@
                 <el-date-picker v-if="['date','datetime'].includes(item.type)" v-model="searchForm[item.prop]" :type="item.type" :placeholder="showPlaceholder ? item.placeholder || '请选择':''" :value-format="item.valueFormat || defaultFormatDate(item.type)"></el-date-picker>
                 <!-- <el-date-picker v-if="item.type == 'daterange'" :default-time="['00:00:00','23:59:59']" unlink-panels v-model="searchForm[item.prop]" type="daterange" start-placeholder="请选择开始时间" end-placeholder="请选择结束时间" range-separator="~" @change="(e) => dateChange(e, item)" :placeholder="item.placeholder || '请选择'"></el-date-picker> -->
                 <!-- radio -->
-                <el-radio-group v-if="item.type == 'radio'" v-model="searchForm[item.prop]" @change="radioChange">
+                <el-radio-group v-if="item.type == 'radio'" v-model="searchForm[item.prop]" @change="e=>radioChange(e,item)">
                   <el-radio v-for="ite in item.renderVal" :key="ite.label" :label="ite.label" :disabled="ite.disabled">
                     {{ ite.title }}
                   </el-radio>
                 </el-radio-group>
                 <!-- checkbox -->
-                <el-checkbox-group v-if="item.type == 'checkbox'" v-model="searchForm[item.prop]" @change="checkChange">
+                <el-checkbox-group v-if="item.type == 'checkbox'" v-model="searchForm[item.prop]" @change="e=>checkChange(e,item)">
                   <el-checkbox v-for="ite in item.renderVal" :key="ite.label" :label="ite.label" :disabled="ite.disabled">
                     {{ ite.title }}
                   </el-checkbox>
@@ -207,8 +207,12 @@ export default {
         this.$set(this.formData, item.renderVal[1], end);
       }
     },
-    radioChange: function (e) {},
-    checkChange: function (e) {},
+    radioChange: function (e, item) {
+      this.$emit("radio-change", e, item.prop);
+    },
+    checkChange: function (e, item) {
+      this.$emit("check-change", e, item.prop);
+    },
     /**
      * @description 自定义btn点击事件
      */
@@ -339,9 +343,6 @@ export default {
 
 <style scoped>
 @import "../../lc.css";
-.group{
-  
-}
 .input-change ::v-deep .el-input__inner {
   padding-right: 46px;
 }

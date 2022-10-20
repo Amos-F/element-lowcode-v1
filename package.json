@@ -1,7 +1,7 @@
 {
   "name": "element-lowcode-v1",
   "description": "一个element-ui 表单和表格的低代码整合组件项目",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": false,
   "license": "MIT",
   "main": "lib/element-lowcode-v1.common.js",
@@ -9,10 +9,11 @@
     "dist",
     "node_modules",
     "public",
-    "src"
+    "src",
+    "packages"
   ],
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve src/main.js",
     "build": "vue-cli-service build --dest dist",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name element-lowcode-v1 --dest lib packages/index.js"

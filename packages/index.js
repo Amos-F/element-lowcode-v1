@@ -8,7 +8,7 @@ const components = [LcForm, LcFormGroup, LcTable];
 const install = function(Vue, options = {}) {
   // 遍历注册全局组件
   components.forEach(component => {
-    console.log(component.name)
+    // console.log(component.name)
     Vue.component(component.name, component);
   });
 };

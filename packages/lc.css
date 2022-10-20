@@ -91,3 +91,12 @@
 .custom-row {
   max-height: 60px;
 }
+.group {
+  padding: 20px 60px;
+}
+
+.group .group-child {
+  margin-top: 10px;
+  background: rgb(242, 242, 242);
+  padding: 20px 0;
+}

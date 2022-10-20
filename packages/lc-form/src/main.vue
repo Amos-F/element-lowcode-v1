@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col-center common-form">
-    <el-form class="w100" :model="searchForm" :ref="formRef" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
+    <el-form :model="searchForm" :ref="formRef" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
       <template v-for="item in listData">
         <el-form-item :label="item.label" :prop="item.prop" :key="item.prop" :label-width="getLabelWidth(item.width)" v-if="!item.showIf || (item.showIf && item.valIf === searchForm[item.propIf] || (item.valOr && item.valOr === searchForm[item.propIf]))">
           <div class="item-class flex" :class="{'input-change':item.max && item.max>0}" :style="{ width: item.itemWidth || '100%' }">
@@ -40,6 +40,9 @@
               <el-option v-for="(ite,ind) in item.renderVal" :key="ind" :label="ite.title" :value="ite.label" :disabled="ite.disabled">
               </el-option>
             </el-select>
+            <!-- tree-select -->
+            <el-cascader :ref="'tree'+item.prop" class="w100" v-if="item.type == 'tree-select'" :options="item.options" v-model="searchForm[item.prop]" clearable filterable :show-all-levels="item.showAllLevels || false" :props="item.props" @change="e=>handleSelect(e,item)">
+            </el-cascader>
             <!-- rich-text -->
             <!-- <Tinymce v-if="item.type == 'rich-text'" ref="editor" v-model="searchForm[item.prop]" :height="400" /> -->
             <!-- upload -->
@@ -79,7 +82,7 @@
 <script>
 // import Tinymce from "@/components/Tinymce";
 // const moment = require("moment");
-import moment from 'moment'
+import moment from "moment";
 /**
  * @description 统一表单生成
  * @param { Array } listData - 用以循环form表单数据列表 [{prop:prop:type:type,label:label:width:width:itemWidth:itemWidth,noAll:noAll,renderVal:renderVal,momentFormat:momentFormat,valueFormat:valueFormat}]
@@ -307,6 +310,24 @@ export default {
       // console.log(file);
       this.$refs["upimg" + prop][0].clearFiles();
       this.$emit("remove", file, prop);
+    },
+    /**
+     * @description 渲染tree-select
+     */
+    handleSelect: function (e, item) {
+      if (!e || !e.length) return;
+      // 由于操作搜索选择无法获取到选中节点，需要在视图更新之后获取
+      this.$nextTick(() => {
+        // console.log(e,this.$refs['tree'+item.prop][0],this.$refs['tree'+item.prop][0].getCheckedNodes())
+        // console.log(e,item,this.formData[item.prop],this.$refs['tree'+item.prop][0].getCheckedNodes())
+        const labels = this.$refs["tree" + item.prop][0].getCheckedNodes()[0].pathLabels;
+        // console.log(e,labels)
+        item.renderVal.map((i, index) => {
+          this.$set(this.formData, i.value, e[index]);
+          this.$set(this.formData, i.label, labels[index]);
+        });
+        // console.log(this.formData)
+      });
     },
     /**
      * @description 查询下拉事件
