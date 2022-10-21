@@ -93,10 +93,12 @@
 }
 .group {
   padding: 20px 60px;
+  border-radius: 6px;
+  background: rgb(242, 242, 242);
 }
 
 .group .group-child {
   margin-top: 10px;
-  background: rgb(242, 242, 242);
+  /* background: rgb(242, 242, 242); */
   padding: 20px 0;
 }

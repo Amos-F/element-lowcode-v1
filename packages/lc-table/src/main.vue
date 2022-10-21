@@ -18,6 +18,7 @@
         <slot name="titleRight" />
       </div>
     </div>
+    {{isMobile}}
     <el-table v-if="!isMobile" :data="options.list" border stripe class="w100" @selection-change="selectionChange" :cell-class-name="customClass">
       <!-- 多选 -->
       <el-table-column type="selection" :width="55" v-if="showSelect">
@@ -149,7 +150,6 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 /**
  * @description 统一表格组件
  * @param {Object} options - {title,list,column} title:表格标题,list:表格数据列表，column:表格字段
@@ -158,18 +158,18 @@
  * @param {Number|String} pageSize - 每页条目数
  * @param {Array} pageSizes - 条目列表
  * @param {Number|String} total - 总条目数
+ * @param {Number|String} mobileWidth  - 展示手机样式所需要宽度的临界值
  */
-// import { createRequire } from "module";
-// const require = createRequire(import.meta.url)
-// const moment = require("moment");
-import moment from 'moment'
+import moment from "moment";
 export default {
   name: "LcTable",
   componentName: "LcTable",
   props: {
     options: {
       type: Object,
-      default: () => {},
+      default: () => {
+        return {}
+      },
     },
     showSelect: {
       type: Boolean,
@@ -201,9 +201,12 @@ export default {
       type: String,
       default: "custom-cell",
     },
-    isMobile: {
-      type: Boolean,
-      default: false,
+    /**
+     * @description 展示手机样式所需宽度临界值
+     */
+    mobileWidth: {
+      type: [String, Number],
+      default: 768,
     },
   },
   data() {
@@ -211,11 +214,15 @@ export default {
       current: this.page,
       size: this.pageSize,
       selection: [],
+      windowWidth: 0,
     };
   },
   created() {},
   mounted() {
-    // console.log(this.$slots,this.$scopedSlots);
+    this.$set(this, "windowWidth", window.innerWidth);
+    window.onresize = () => {
+      this.$set(this, "windowWidth", window.innerWidth);
+    };
   },
   watch: {
     page: function (v) {
@@ -227,9 +234,9 @@ export default {
     pageLayout() {
       return this.isMobile ? "prev, pager, next" : "total, sizes, prev, pager, next, jumper";
     },
-    // isMobile() {
-    //   return this.windowWidth - 750 <= 0;
-    // },
+    isMobile() {
+      return this.windowWidth - Number(this.mobileWidth) <= 0;
+    },
   },
   methods: {
     getDate: function (time, format) {
@@ -237,17 +244,13 @@ export default {
       return time ? moment(time).format(format) : "";
     },
     /**
-     * @description 获取有效期
+     * @description 日期范围
      */
     getMergeDate: function (row, field) {
       // console.log(row,moment(row.validStartTime).format('YYYY.MM.DD'),row.validStartTime,row.validStartTime)
       const start = field ? field + "StartTime" : "validStartTime";
       const end = field ? field + "EndTime" : "validEndTime";
       let expTime = moment(row[start]).format("YYYY.MM.DD") + "-" + moment(row[end]).format("YYYY.MM.DD");
-      if (row.validType == 2 && !field) {
-        const text = row.validDayType == 1 ? "" : "次日起";
-        expTime = `领取成功后${text}${row.validDay}内天有效`;
-      }
       // console.log(expTime);
       return expTime;
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col-center common-form">
     <el-form :model="searchForm" ref="commonForm" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
-      <div class="group" v-for="(groupItem,groupIndex) in listData" :key="groupIndex" :class="customClass">
+      <div class="group" :style="groupStyle" v-for="(groupItem,groupIndex) in listData" :key="groupIndex" :class="customClass">
         <span class="u-font-26 font-500" v-text="groupItem.title"></span>
         <div class="group-child">
           <template v-for="item in groupItem.list">
@@ -69,13 +69,15 @@
       </div>
       <el-form-item>
         <template v-if="!$slots.default">
-          <template v-if="btns.length">
-            <el-button :type="item.type" @click="handleBtn(item.event)" v-for="item in btns" :key="item.text">{{ item.text }}</el-button>
-          </template>
-          <template v-else>
-            <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="onCancel">取消</el-button>
-          </template>
+          <div class="btn-group">
+            <template v-if="btns.length">
+              <el-button :type="item.type" @click="handleBtn(item.event)" v-for="item in btns" :key="item.text">{{ item.text }}</el-button>
+            </template>
+            <template v-else>
+              <el-button type="primary" @click="onSubmit">保存</el-button>
+              <el-button @click="onCancel">取消</el-button>
+            </template>
+          </div>
         </template>
         <slot></slot>
       </el-form-item>
@@ -84,7 +86,7 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
+import moment from "moment";
 // const moment = require("moment");
 /**
  * @description 统一表单生成
@@ -109,11 +111,15 @@ export default {
   props: {
     listData: {
       type: Array,
-      default: () => [],
+      default: () => {
+        return [];
+      },
     },
     formData: {
       type: Object,
-      default: () => {},
+      default: () => {
+        return {};
+      },
     },
     labelWidth: {
       type: [Number, String],
@@ -129,11 +135,15 @@ export default {
     },
     formRules: {
       type: Object,
-      default: () => {},
+      default: () => {
+        return {};
+      },
     },
     btns: {
       type: Array,
-      default: () => [],
+      default: () => {
+        return [];
+      },
     },
     limit: {
       type: Number,
@@ -169,6 +179,15 @@ export default {
     },
     showImgs: {
       type: [Object, Array],
+      default: () => {
+        return {};
+      },
+    },
+    /**
+     * @description 自定义分组样式
+     */
+    groupStyle: {
+      type: Object,
       default: () => {
         return {};
       },

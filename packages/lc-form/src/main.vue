@@ -47,7 +47,7 @@
             <!-- <Tinymce v-if="item.type == 'rich-text'" ref="editor" v-model="searchForm[item.prop]" :height="400" /> -->
             <!-- upload -->
             <!-- 文件上传 -->
-            <el-upload :class="[disabled?'img-upload-disabled':'']" v-if="item.type == 'image-upload'" :file-list="item.fileList || (showImgs[item.prop] ? [showImgs[item.prop]] : [])" :ref="'upimg'+item.prop" :action="item.action || '#'" :limit="limit" list-type="picture-card" :auto-upload="item.autoupload" :on-exceed="(e) => handleImage('limit', item.prop)" :on-error="(e) => handleImage('error', e, item.prop)" :on-change="(e) => handleImage('change', e, item.prop)" :http-request="uploadFn" :accept="item.accept || '' ">
+            <el-upload :class="[disabled?'img-upload-disabled':'']" v-if="item.type == 'image-upload'" :file-list="item.fileList || (showImgs[item.prop] ? [showImgs[item.prop]] : [])" :ref="'upimg'+item.prop" :action="item.action || '#'" :limit="item.limit ?? limit" list-type="picture-card" :auto-upload="item.autoupload" :on-exceed="(e) => handleImage('limit', item.prop)" :on-error="(e) => handleImage('error', e, item.prop)" :on-change="(e) => handleImage('change', e, item.prop)" :http-request="uploadFn" :accept="item.accept || '' ">
               <i slot="default" class="el-icon-plus"></i>
               <div slot="file" slot-scope="{ file }">
                 <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
@@ -65,13 +65,15 @@
       <slot name="item"></slot>
       <el-form-item>
         <template v-if="!$slots.default">
-          <template v-if="btns.length">
-            <el-button class="u-m-r-5" :type="item.type" @click="handleBtn(item.event)" v-for="item in btns" :key="item.text">{{ item.text }}</el-button>
-          </template>
-          <template v-else>
-            <el-button class="u-m-r-5" type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="onCancel">取消</el-button>
-          </template>
+          <div class="btn-group">
+            <template v-if="btns.length">
+              <el-button class="u-m-r-5" :type="item.type" @click="handleBtn(item.event)" v-for="item in btns" :key="item.text">{{ item.text }}</el-button>
+            </template>
+            <template v-else>
+              <el-button class="u-m-r-5" type="primary" @click="onSubmit">保存</el-button>
+              <el-button @click="onCancel">取消</el-button>
+            </template>
+          </div>
         </template>
         <slot></slot>
       </el-form-item>
