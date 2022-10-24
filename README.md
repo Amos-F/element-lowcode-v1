@@ -184,20 +184,21 @@ export default {
 
 ## lc-form Attributes
 
-| 参数            | 说明                                              | 类型          | 是否必须 | 可选值                | 默认值 |
-| --------------- | :------------------------------------------------ | ------------- | -------- | --------------------- | ------ |
-| listData        | 表单字段循环JSON列表，想见下方`listData`说明      | Array<Object> | 是       |                       |        |
-| formData        | 表单`:mode`绑定值同`el-form的:mode`               | Object        | 是       |                       |        |
-| formRules       | 表单验证规则，同`el-from`的rules                  | Object        | 否       |                       |        |
-| btns            | 表单的自定义按钮级事件数据详见下方`btns`说明      | Array         | 否       |                       | []     |
-| labelWidth      | 同`el-form`的`labelWidth`                         | Number/String | 否       |                       | 80px   |
-| size            | 同`el-form`的size                                 | String        | 否       | medium / small / mini | mini   |
-| inline          | 是否行内表单，同`el-form`（一般搜索模块设置true） | Boolean       | 否       | true / false          | true   |
-| limit           | 上传控件文件数量通用限制`同el-upload`的limit      | Number        | 否       |                       | 1      |
-| disabled        | 同`el-form`                                       | Boolean       | 否       | true / false          | false  |
-| showPlaceholder | 是否展示placeholder                               | `Boolean`     | 否       | true / false          | true   |
-| remoteLoading   | *远程搜索loading状态`同el-select`*                | `Boolean`     | 否       | true / false          | false  |
-| showImgs        |                                                   | Boolean       | 否       |                       |        |
+| 参数            | 说明                                              | 类型            | 是否必须 | 可选值                | 默认值 |
+| --------------- | :------------------------------------------------ | --------------- | -------- | --------------------- | ------ |
+| listData        | 表单字段循环JSON列表，想见下方`listData`说明      | Array<Object>   | 是       |                       |        |
+| formData        | 表单`:mode`绑定值同`el-form的:mode`               | Object          | 是       |                       |        |
+| formRules       | 表单验证规则，同`el-from`的rules                  | Object          | 否       |                       |        |
+| btns            | 表单的自定义按钮级事件数据详见下方`btns`说明      | Array           | 否       |                       | []     |
+| labelWidth      | 同`el-form`的`labelWidth`                         | Number/String   | 否       |                       | 80px   |
+| size            | 同`el-form`的size                                 | String          | 否       | medium / small / mini | mini   |
+| inline          | 是否行内表单，同`el-form`（一般搜索模块设置true） | Boolean         | 否       | true / false          | true   |
+| limit           | 上传控件文件数量通用限制`同el-upload`的limit      | Number          | 否       |                       | 1      |
+| disabled        | 同`el-form`                                       | Boolean         | 否       | true / false          | false  |
+| showPlaceholder | 是否展示placeholder                               | `Boolean`       | 否       | true / false          | true   |
+| remoteLoading   | *远程搜索loading状态`同el-select`*                | `Boolean`       | 否       | true / false          | false  |
+| showImgs        |                                                   | Boolean         | 否       |                       |        |
+| mobileWidth     | 切换为手机样式的宽度临界值                        | String / Number | 否       |                       | 768    |
 
 ### listData Attributes
 
