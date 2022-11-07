@@ -24,4 +24,4 @@ export default {
   LcFormGroup,
   LcTable
 };
-// export { LcForm, LcFormGroup, LcTable };
+export { LcForm, LcFormGroup, LcTable };
