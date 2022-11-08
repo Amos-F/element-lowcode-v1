@@ -1,7 +1,7 @@
 {
   "name": "element-lowcode-v1",
   "description": "一个element-ui 表单和表格的低代码整合组件项目",
-  "version": "1.0.8",
+  "version": "1.1.1",
   "private": false,
   "license": "MIT",
   "main": "lib/element-lowcode-v1.common.js",
@@ -56,5 +56,6 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "keywords": ["element-ui","low-code","lowcode","vue"]
 }
