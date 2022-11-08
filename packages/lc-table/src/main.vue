@@ -18,7 +18,6 @@
         <slot name="titleRight" />
       </div>
     </div>
-    {{isMobile}}
     <el-table v-if="!isMobile" :data="options.list" border stripe class="w100" @selection-change="selectionChange" :cell-class-name="customClass">
       <!-- 多选 -->
       <el-table-column type="selection" :width="55" v-if="showSelect">
