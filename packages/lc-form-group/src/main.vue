@@ -1,66 +1,106 @@
 <template>
   <div class="flex flex-col-center common-form">
-    <el-form :model="searchForm" ref="commonForm" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size" :rules="innerRules" :disabled="disabled">
-      <div class="group" :style="groupStyle" v-for="(groupItem,groupIndex) in listData" :key="groupIndex" :class="customClass">
+    <el-form :model="searchForm" ref="commonForm" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size"
+      :rules="innerRules" :disabled="disabled">
+      <div class="group" :style="groupStyle" v-for="(groupItem, groupIndex) in listData" :key="groupIndex"
+        :class="customClass">
         <span class="u-font-26 font-500" v-text="groupItem.title"></span>
         <div class="group-child">
           <template v-for="item in groupItem.list">
             <!-- if条件设置 form-item 根据if条件显示/隐藏 or 根据hide字段判断是否隐藏 -->
-            <el-form-item v-if="(!item.showIf || (item.showIf && item.valIf == searchForm[item.propIf] || (item.valOr && item.valOr === searchForm[item.propIf]))) && !item.hide" :label="item.label" :prop="item.prop" :required="item.required || false" :key="item.prop" :label-width="getLabelWidth(item.width)">
-              <div class="item-class flex" :class="{'input-change':item.max && item.max>0}" :style="{ width: item.itemWidth || groupItem.itemWidth || itemWidth || '100%' }">
+            <el-form-item
+              v-if="(!item.showIf || (item.showIf && item.valIf == searchForm[item.propIf] || (item.valOr && item.valOr === searchForm[item.propIf]))) && !item.hide"
+              :label="item.label" :prop="item.prop" :required="item.required || false" :key="item.prop"
+              :label-width="getLabelWidth(item.width)">
+              <div class="item-class flex" :class="{ 'input-change': item.max && item.max > 0 }"
+                :style="{ width: item.itemWidth || groupItem.itemWidth || itemWidth || '100%' }">
                 <!-- input -->
-                <el-input v-if="!item.type || item.type == 'text' || item.type == 'textarea'" v-model="searchForm[item.prop]" :maxlength="item.max || -1" :show-word-limit="item.max > 0" :type="item.type || 'text'" :placeholder="item.placeholder || '请输入'"></el-input>
+                <el-input v-if="!item.type || item.type == 'text' || item.type == 'textarea'"
+                  v-model="searchForm[item.prop]" :maxlength="item.max || -1" :show-word-limit="item.max > 0"
+                  :type="item.type || 'text'" :placeholder="item.placeholder || '请输入'" :clearable="item.clearable">
+                </el-input>
                 <!-- number -->
-                <el-input v-if="item.type == 'number'" v-model.number="searchForm[item.prop]" :maxlength="item.max || -1" :show-word-limit="item.max > 0" :type="item.type || 'text'" :placeholder="item.placeholder || '请输入'"></el-input>
+                <el-input v-if="item.type == 'number'" v-model.number="searchForm[item.prop]"
+                  :maxlength="item.max || -1" :show-word-limit="item.max > 0" :type="item.type || 'text'"
+                  :placeholder="item.placeholder || '请输入'" :clearable="item.clearable"></el-input>
                 <!-- text -->
                 <span v-if="item.type == 'txt'" v-text="searchForm[item.prop]"></span>
                 <!-- image -->
                 <el-image v-if="item.type == 'img'" :src="searchForm[item.prop]" class="custom-img">
-                  <div slot="error" class="w100 h100 flex flex-row-center flex-col-center" style="border:1px dashed #ccc;">
+                  <div slot="error" class="w100 h100 flex flex-row-center flex-col-center"
+                    style="border:1px dashed #ccc;">
                     <i class="el-icon-picture u-font-30"></i>
                   </div>
                 </el-image>
                 <!-- date range -->
-                <el-date-picker v-if="['daterange','datetimerange'].includes(item.type)" :default-time="['00:00:00','23:59:59']" unlink-panels v-model="searchForm[item.prop]" :type="item.type || 'daterange'" start-placeholder="请选择开始时间" end-placeholder="请选择结束时间" range-separator="~" @change="(e) => dateChange(e, item)" :placeholder="showPlaceholder ? item.placeholder || '请选择':''" :value-format="item.valueFormat || defaultFormatDate(item.type)"></el-date-picker>
+                <el-date-picker v-if="['daterange', 'datetimerange'].includes(item.type)"
+                  :default-time="['00:00:00', '23:59:59']" unlink-panels v-model="searchForm[item.prop]"
+                  :type="item.type || 'daterange'" start-placeholder="请选择开始时间" end-placeholder="请选择结束时间"
+                  range-separator="~" @change="(e) => dateChange(e, item)"
+                  :placeholder="showPlaceholder ? item.placeholder || '请选择' : ''"
+                  :value-format="item.valueFormat || defaultFormatDate(item.type)" :clearable="item.clearable">
+                </el-date-picker>
                 <!-- date -->
-                <el-date-picker v-if="['date','datetime'].includes(item.type)" v-model="searchForm[item.prop]" :type="item.type" :placeholder="showPlaceholder ? item.placeholder || '请选择':''" :value-format="item.valueFormat || defaultFormatDate(item.type)"></el-date-picker>
+                <el-date-picker v-if="['date', 'datetime'].includes(item.type)" v-model="searchForm[item.prop]"
+                  :type="item.type" :placeholder="showPlaceholder ? item.placeholder || '请选择' : ''"
+                  :value-format="item.valueFormat || defaultFormatDate(item.type)" :clearable="item.clearable">
+                </el-date-picker>
                 <!-- <el-date-picker v-if="item.type == 'daterange'" :default-time="['00:00:00','23:59:59']" unlink-panels v-model="searchForm[item.prop]" type="daterange" start-placeholder="请选择开始时间" end-placeholder="请选择结束时间" range-separator="~" @change="(e) => dateChange(e, item)" :placeholder="item.placeholder || '请选择'"></el-date-picker> -->
                 <!-- radio -->
-                <el-radio-group v-if="item.type == 'radio'" v-model="searchForm[item.prop]" @change="e=>radioChange(e,item)">
+                <el-radio-group v-if="item.type == 'radio'" v-model="searchForm[item.prop]"
+                  @change="e => radioChange(e, item)">
                   <el-radio v-for="ite in item.renderVal" :key="ite.label" :label="ite.label" :disabled="ite.disabled">
                     {{ ite.title }}
                   </el-radio>
                 </el-radio-group>
                 <!-- checkbox -->
-                <el-checkbox-group v-if="item.type == 'checkbox'" v-model="searchForm[item.prop]" @change="e=>checkChange(e,item)">
-                  <el-checkbox v-for="ite in item.renderVal" :key="ite.label" :label="ite.label" :disabled="ite.disabled">
+                <el-checkbox-group v-if="item.type == 'checkbox'" v-model="searchForm[item.prop]"
+                  @change="e => checkChange(e, item)">
+                  <el-checkbox v-for="ite in item.renderVal" :key="ite.label" :label="ite.label"
+                    :disabled="ite.disabled">
                     {{ ite.title }}
                   </el-checkbox>
                 </el-checkbox-group>
                 <!-- select -->
-                <el-select class="w100" v-if="item.type == 'select'" :filterable="item.filterable" :remote="item.remote" v-model="searchForm[item.prop]" :placeholder="item.placeholder || '请选择'" :disabled="item.disabled" :remote-method="e=>remoteMethod(e,item.prop)" @change="e=>selectChange(e,item.renderProp || item.prop)" :allow-create="item.allowCreate" :default-first-option="item.defaultFirstOption">
+                <el-select class="w100" v-if="item.type == 'select'" :filterable="item.filterable" :remote="item.remote"
+                  v-model="searchForm[item.prop]" :placeholder="item.placeholder || '请选择'" :disabled="item.disabled"
+                  :remote-method="e => remoteMethod(e, item.prop)"
+                  @change="e => selectChange(e, item.renderProp || item.prop)" :allow-create="item.allowCreate"
+                  :default-first-option="item.defaultFirstOption" :clearable="item.clearable">
                   <el-option label="全部" value="" v-if="!item.noAll"></el-option>
-                  <el-option v-for="ite in item.renderVal" :key="ite.label" :label="ite.title" :value="ite.label" :disabled="ite.disabled">
+                  <el-option v-for="ite in item.renderVal" :key="ite.label" :label="ite.title" :value="ite.label"
+                    :disabled="ite.disabled">
                   </el-option>
                 </el-select>
                 <!-- tree-select -->
-                <el-cascader :ref="'tree'+item.prop" class="w100" v-if="item.type == 'tree-select'" :options="item.options" v-model="searchForm[item.prop]" clearable filterable :show-all-levels="item.showAllLevels || false" :props="item.props" @change="e=>handleSelect(e,item)">
+                <el-cascader :ref="'tree' + item.prop" class="w100" v-if="item.type == 'tree-select'"
+                  :options="item.options" v-model="searchForm[item.prop]" :clearable="item.clearable" filterable
+                  :show-all-levels="item.showAllLevels || false" :props="item.props"
+                  @change="e => handleSelect(e, item)">
                 </el-cascader>
                 <!-- rich-text -->
                 <!-- <Tinymce v-if="item.type == 'rich-text'" ref="editor" v-model="searchForm[item.prop]" :height="item.height||400" width="100%" /> -->
                 <!-- 文件上传 -->
-                <el-upload :class="[disabled?'img-upload-disabled':'']" v-if="item.type == 'image-upload'" :file-list="item.fileList || (showImgs[item.prop] ? [showImgs[item.prop]] : [])" :ref="'upimg'+item.prop" :action="item.action || '#'" :limit="limit" list-type="picture-card" :auto-upload="item.autoupload" :on-exceed="(e) => handleImage('limit', item.prop)" :on-error="(e) => handleImage('error', e, item.prop)" :on-change="(e) => handleImage('change', e, item.prop)" :http-request="uploadFn" :accept="item.accept || '' ">
+                <el-upload :class="[disabled ? 'img-upload-disabled' : '']" v-if="item.type == 'image-upload'"
+                  :file-list="item.fileList || (showImgs[item.prop] ? [showImgs[item.prop]] : [])"
+                  :ref="'upimg' + item.prop" :action="item.action || '#'" :limit="limit" list-type="picture-card"
+                  :auto-upload="item.autoupload" :on-exceed="(e) => handleImage('limit', item.prop)"
+                  :on-error="(e) => handleImage('error', e, item.prop)"
+                  :on-change="(e) => handleImage('change', e, item.prop)" :http-request="uploadFn"
+                  :accept="item.accept || ''">
                   <i slot="default" class="el-icon-plus"></i>
                   <div slot="file" slot-scope="{ file }">
                     <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
                     <span class="el-upload-list__item-actions">
-                      <span class="el-upload-list__item-delete" @click.stop="handleRemove(file,item.prop)" v-if="!disabled">
+                      <span class="el-upload-list__item-delete" @click.stop="handleRemove(file, item.prop)"
+                        v-if="!disabled">
                         <i class="el-icon-delete"></i>
                       </span>
                     </span>
                   </div>
                 </el-upload>
-                <el-button class="u-m-l-10" type="primary" size="mini" @click="$emit(item.btnEvent)" v-if="item.widthBtn">{{item.btnText}}</el-button>
+                <el-button class="u-m-l-10" type="primary" size="mini" @click="$emit(item.btnEvent)"
+                  v-if="item.widthBtn">{{ item.btnText }}</el-button>
               </div>
             </el-form-item>
           </template>
@@ -71,7 +111,9 @@
         <template v-if="!$slots.default">
           <div class="btn-group">
             <template v-if="btns.length">
-              <el-button :type="item.type" @click="handleBtn(item.event)" v-for="item in btns" :key="item.text">{{ item.text }}</el-button>
+              <el-button :type="item.type" @click="handleBtn(item.event)" v-for="item in btns" :key="item.text">{{
+                  item.text
+              }}</el-button>
             </template>
             <template v-else>
               <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -321,10 +363,11 @@ export default {
         const labels = this.$refs["tree" + item.prop][0].getCheckedNodes()[0].pathLabels;
         // console.log(e,labels)
         item.renderVal.map((i, index) => {
-          this.$set(this.formData, i.value, e[index]);
-          this.$set(this.formData, i.label, labels[index]);
+          if (i.value) this.$set(this.formData, i.value, e[index]);
+          if (i.label) this.$set(this.formData, i.label, labels[index]);
         });
         // console.log(this.formData)
+        this.$emit('tree-select', e, item.prop)
       });
     },
     /**
@@ -362,9 +405,11 @@ export default {
 
 <style scoped>
 @import "../../lc.css";
+
 .input-change ::v-deep .el-input__inner {
   padding-right: 46px;
 }
+
 ::v-deep .img-upload-disabled .el-upload--picture-card {
   display: none;
 }

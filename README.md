@@ -23,13 +23,13 @@ import Vue from "vue";
 import App from "./App.vue";
 // 引入Element-ui
 import ElementUI from "element-ui";
-// 引入 element-lowcode-v1插件
+// #引入 element-lowcode-v1插件
 import EleLowcode from "element-lowcode-v1";
 Vue.use(ElementUI);
 Vue.use(EleLowcode);
 // 引入element-ui css 样式
 import "element-ui/lib/theme-chalk/index.css";
-// 引入 element-lowcode-v1 css 样式
+// #引入 element-lowcode-v1 css 样式
 import 'element-lowcode-v1/lib/element-lowcode-v1.css'
 
 Vue.config.productionTip = false;
@@ -184,21 +184,24 @@ export default {
 
 ## lc-form Attributes
 
-| 参数            | 说明                                              | 类型            | 是否必须 | 可选值                | 默认值 |
-| --------------- | :------------------------------------------------ | --------------- | -------- | --------------------- | ------ |
-| listData        | 表单字段循环JSON列表，想见下方`listData`说明      | Array<Object>   | 是       |                       |        |
-| formData        | 表单`:mode`绑定值同`el-form的:mode`               | Object          | 是       |                       |        |
-| formRules       | 表单验证规则，同`el-from`的rules                  | Object          | 否       |                       |        |
-| btns            | 表单的自定义按钮级事件数据详见下方`btns`说明      | Array           | 否       |                       | []     |
-| labelWidth      | 同`el-form`的`labelWidth`                         | Number/String   | 否       |                       | 80px   |
-| size            | 同`el-form`的size                                 | String          | 否       | medium / small / mini | mini   |
-| inline          | 是否行内表单，同`el-form`（一般搜索模块设置true） | Boolean         | 否       | true / false          | true   |
-| limit           | 上传控件文件数量通用限制`同el-upload`的limit      | Number          | 否       |                       | 1      |
-| disabled        | 同`el-form`                                       | Boolean         | 否       | true / false          | false  |
-| showPlaceholder | 是否展示placeholder                               | `Boolean`       | 否       | true / false          | true   |
-| remoteLoading   | *远程搜索loading状态`同el-select`*                | `Boolean`       | 否       | true / false          | false  |
-| showImgs        |                                                   | Boolean         | 否       |                       |        |
-| mobileWidth     | 切换为手机样式的宽度临界值                        | String / Number | 否       |                       | 768    |
+| 参数            | 说明                                                         | 类型            | 是否必须 | 可选值                | 默认值 |
+| --------------- | :----------------------------------------------------------- | --------------- | -------- | --------------------- | ------ |
+| listData        | 表单字段循环JSON列表，想见下方`listData`说明                 | Array<Object>   | 是       |                       |        |
+| formData        | 表单`:mode`绑定值同`el-form的:mode`                          | Object          | 是       |                       |        |
+| formRules       | 表单验证规则，同`el-from`的rules                             | Object          | 否       |                       |        |
+| btns            | 表单的自定义按钮级事件数据详见下方`btns`说明                 | Array           | 否       |                       | []     |
+| labelWidth      | 同`el-form`的`labelWidth`                                    | Number/String   | 否       |                       | 80px   |
+| size            | 同`el-form`的size                                            | String          | 否       | medium / small / mini | mini   |
+| inline          | 是否行内表单，同`el-form`（一般搜索模块设置true）            | Boolean         | 否       | true / false          | true   |
+| limit           | 上传控件文件数量通用限制`同el-upload`的limit                 | Number          | 否       |                       | 1      |
+| disabled        | 同`el-form`                                                  | Boolean         | 否       | true / false          | false  |
+| showPlaceholder | 是否展示placeholder                                          | `Boolean`       | 否       | true / false          | true   |
+| remoteLoading   | *远程搜索loading状态`同el-select`*                           | `Boolean`       | 否       | true / false          | false  |
+| showImgs        |                                                              | Boolean         | 否       |                       |        |
+| mobileWidth     | 切换为手机样式的宽度临界值                                   | String / Number | 否       |                       | 768    |
+| confirmText     | 默认确认按钮文字                                             | String          | 否       |                       | 保存   |
+| cancelText      | 默认取消按钮文字                                             | String          | 否       |                       | 取消   |
+| isSearch        | 是否为查询表单，如果true，那么取消按钮默认文字为重置，并且点击会触发重置表单数据 | Boolean         | 否       |                       | false  |
 
 ### listData Attributes
 
@@ -215,10 +218,12 @@ export default {
 | renderVal     | 当type的值是radio / checkbox / select 的时候需要渲染控件上的选择项，详见`renderVal`说明 | Array   |          |              |                                   |
 | valueFormat   | `el-date-picker`组件的格式化                                 | String  | 否       |              | yyyy-MM-dd HH:mm:ss  / yyyy-MM-dd |
 | momentFormat  | moment插件中的格式化配置                                     | String  | 否       |              | YYYY-MM-DD HH:mm:ss               |
-| required      | 同`el-form-item` 的 `required`属性                           |         |          |              |                                   |
+| required      | 同`el-form-item` 的 `required`属性                           | Boolean |          |              |                                   |
+| disabled      | 组件禁用状态（当组件支持disabled属性时）                     | Boolean |          |              |                                   |
+| clearable     | 是否可清空（当组件支持clearable属性时）                      | Boolean |          |              |                                   |
 | showIf        | 条件字段，是否开启此控件根据条件展示或者隐藏                 | Boolean | 否       |              | false                             |
-| valIf         | 条件字段展示所需判断的值（如果valIf的值与表单绑定数据中propIf字段值相等则展示否则隐藏该组件）*注1* |         |          |              |                                   |
-| propIf        | 条件字段展示所需判断的字段（如果valIf的值与表单绑定数据中propIf字段值相等则展示否则隐藏该组件）*注1* |         |          |              |                                   |
+| valIf         | 条件字段展示所需判断的值（如果valIf的值与表单绑定数据中propIf字段值相等则展示否则隐藏该组件）*注1* | Any     |          |              |                                   |
+| propIf        | 条件字段展示所需判断的字段（如果valIf的值与表单绑定数据中propIf字段值相等则展示否则隐藏该组件）*注1* | String  |          |              |                                   |
 | valOr         | `或`条件字段，必须要先有valIf和showIf 满足if条件之后或者再满足valOr的值与绑定数据中propIf字段值相等则展示否则隐藏该组件 *注2* | Any     |          |              |                                   |
 | options       | `el-cascader`的`options`属性                                 |         |          |              |                                   |
 | props         | `el-cascader`的`props`属性                                   |         |          |              |                                   |

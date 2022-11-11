@@ -2,7 +2,7 @@
   <div class="flex flex-col-center common-form flex-column">
     <div class="w100">
       <el-form :model="searchForm" :ref="formRef" :label-width="getLabelWidth(labelWidth)" :inline="inline" :size="size"
-        :rules="innerRules" :disabled="disabled">
+        :rules="innerRules" :disabled="disabled" :label-position="isMobile ? 'top' : labelPosition">
         <template v-for="item in listData">
           <el-form-item :label="item.label" :prop="item.prop" :key="item.prop" :label-width="getLabelWidth(item.width)"
             v-if="!item.showIf || (item.showIf && item.valIf === searchForm[item.propIf] || (item.valOr && item.valOr === searchForm[item.propIf]))">
@@ -11,11 +11,12 @@
               <!-- input -->
               <el-input v-if="!item.type || item.type == 'text' || item.type == 'textarea'" :disabled="item.disabled"
                 v-model="searchForm[item.prop]" :maxlength="item.max || -1" :show-word-limit="item.max > 0"
-                :type="item.type || 'text'" :placeholder="showPlaceholder ? item.placeholder || '请输入' : ''"></el-input>
+                :type="item.type || 'text'" :placeholder="showPlaceholder ? item.placeholder || '请输入' : ''"
+                :clearable="item.clearable"></el-input>
               <!-- number -->
               <el-input v-if="item.type == 'number'" v-model.number="searchForm[item.prop]" :maxlength="item.max || -1"
                 :show-word-limit="item.max > 0" :type="item.type || 'text'" :disabled="item.disabled"
-                :placeholder="showPlaceholder ? item.placeholder || '请输入' : ''"></el-input>
+                :placeholder="showPlaceholder ? item.placeholder || '请输入' : ''" :clearable="item.clearable"></el-input>
               <!-- text -->
               <span v-if="item.type == 'txt'" v-text="searchForm[item.prop]"></span>
               <!-- image -->
@@ -31,11 +32,13 @@
                 :type="item.type || 'daterange'" start-placeholder="请选择开始时间" end-placeholder="请选择结束时间"
                 range-separator="~" @change="(e) => dateChange(e, item)" :disabled="item.disabled"
                 :placeholder="showPlaceholder ? item.placeholder || '请选择' : ''"
-                :value-format="item.valueFormat || defaultFormatDate(item.type)"></el-date-picker>
+                :value-format="item.valueFormat || defaultFormatDate(item.type)" :clearable="item.clearable">
+              </el-date-picker>
               <!-- date -->
               <el-date-picker v-if="['date', 'datetime'].includes(item.type)" v-model="searchForm[item.prop]"
                 :type="item.type" :placeholder="showPlaceholder ? item.placeholder || '请选择' : ''"
-                :value-format="item.valueFormat || defaultFormatDate(item.type)" :disabled="item.disabled">
+                :value-format="item.valueFormat || defaultFormatDate(item.type)" :disabled="item.disabled"
+                :clearable="item.clearable">
               </el-date-picker>
               <!-- datetime range -->
               <!-- <el-date-picker v-if="item.type == 'daterange'" :default-time="['00:00:00','23:59:59']" unlink-panels v-model="searchForm[item.prop]" type="daterange" start-placeholder="请选择开始时间" end-placeholder="请选择结束时间" range-separator="~" @change="(e) => dateChange(e, item)" :placeholder="showPlaceholder ? item.placeholder || '请选择':''"></el-date-picker> -->
@@ -59,7 +62,7 @@
                 :placeholder="showPlaceholder ? item.placeholder || '请选择' : ''" :disabled="item.disabled"
                 :remote-method="e => remoteMethod(e, item.prop)" :loading="remoteLoading"
                 @change="e => selectChange(e, item.renderProp || item.prop)" :allow-create="item.allowCreate"
-                :default-first-option="item.defaultFirstOption">
+                :default-first-option="item.defaultFirstOption" :clearable="item.clearable">
                 <el-option label="全部" value="" v-if="!item.noAll"></el-option>
                 <el-option v-for="(ite, ind) in item.renderVal" :key="ind" :label="ite.title" :value="ite.label"
                   :disabled="ite.disabled">
@@ -67,8 +70,9 @@
               </el-select>
               <!-- tree-select -->
               <el-cascader :ref="'tree' + item.prop" class="w100" v-if="item.type == 'tree-select'"
-                :disabled="item.disabled" :options="item.options" v-model="searchForm[item.prop]" clearable filterable
-                :show-all-levels="item.showAllLevels || false" :props="item.props" @change="e => handleSelect(e, item)">
+                :disabled="item.disabled" :options="item.options" v-model="searchForm[item.prop]"
+                :clearable="item.clearable" filterable :show-all-levels="item.showAllLevels || false"
+                :props="item.props" @change="e => handleSelect(e, item)">
               </el-cascader>
               <!-- rich-text -->
               <!-- <Tinymce v-if="item.type == 'rich-text'" ref="editor" v-model="searchForm[item.prop]" :height="400" /> -->
@@ -76,7 +80,7 @@
               <!-- 文件上传 -->
               <el-upload :class="[disabled ? 'img-upload-disabled' : '']" v-if="item.type == 'image-upload'"
                 :file-list="item.fileList || (showImgs[item.prop] ? [showImgs[item.prop]] : [])"
-                :ref="'upimg' + item.prop" :action="item.action || '#'" :limit="item.limit ?? limit"
+                :ref="'upimg' + item.prop" :action="item.action || '#'" :limit="item.limit > 0 ? item.limit : limit"
                 list-type="picture-card" :auto-upload="item.autoupload"
                 :on-exceed="(e) => handleImage('limit', item.prop)"
                 :on-error="(e) => handleImage('error', e, item.prop)"
@@ -93,7 +97,8 @@
                   </span>
                 </div>
               </el-upload>
-              <el-button class="u-m-l-10" type="primary" :disabled="item.disabled" size="mini" @click="$emit(item.btnEvent)" v-if="item.widthBtn">
+              <el-button class="u-m-l-10" type="primary" :disabled="item.disabled" size="mini"
+                @click="$emit(item.btnEvent)" v-if="item.widthBtn">
                 {{ item.btnText }}</el-button>
             </div>
           </el-form-item>
@@ -107,8 +112,8 @@
                   :key="item.text">{{ item.text }}</el-button>
               </template>
               <template v-else>
-                <el-button class="u-m-r-5" type="primary" @click="onSubmit">保存</el-button>
-                <el-button @click="onCancel">取消</el-button>
+                <el-button class="u-m-r-5" type="primary" @click="onSubmit">{{ confirmText }}</el-button>
+                <el-button @click="onCancel">{{ cancelText }}</el-button>
               </template>
             </div>
           </template>
@@ -142,6 +147,7 @@ export default {
       searchForm: this.formData,
       innerRules: this.formRules,
       oldData: JSON.parse(JSON.stringify(this.formData)),
+      windowWidth: 0,
     };
   },
   props: {
@@ -163,6 +169,10 @@ export default {
     labelWidth: {
       type: [Number, String],
       default: "80px",
+    },
+    labelPosition: {
+      type: String,
+      default: 'right'
     },
     /**
      * @description size
@@ -227,14 +237,40 @@ export default {
         return {};
       },
     },
+    /**
+     * @description 展示手机样式所需宽度临界值
+     */
+    mobileWidth: {
+      type: [String, Number],
+      default: 768,
+    },
+    confirmText: {
+      type: String,
+      default: '保存'
+    },
+    cancelText: {
+      type: String,
+      default: '取消'
+    },
+    isSearch: {
+      type: Boolean,
+      default: false
+    }
   },
   mounted() {
     // console.log(this.formData);
+    this.$set(this, "windowWidth", window.innerWidth);
+    window.onresize = () => {
+      this.$set(this, "windowWidth", window.innerWidth);
+    };
   },
   computed: {
     formRef() {
       return "commonForm" + Math.round(Math.random() * 1000);
     },
+    isMobile() {
+      return this.windowWidth - Number(this.mobileWidth) <= 0;
+    }
   },
   methods: {
     /**
@@ -318,11 +354,15 @@ export default {
         // console.log(e,item,this.formData[item.prop],this.$refs['tree'+item.prop][0].getCheckedNodes())
         const labels = this.$refs["tree" + item.prop][0].getCheckedNodes()[0].pathLabels;
         // console.log(e,labels)
-        item.renderVal.map((i, index) => {
-          this.$set(this.formData, i.value, e[index]);
-          this.$set(this.formData, i.label, labels[index]);
-        });
+        if (item.renderVal && item.renderVal.length) {
+          item.renderVal.map((i, index) => {
+            if (i.value) this.$set(this.formData, i.value, e[index]);
+            if (i.label) this.$set(this.formData, i.label, labels[index]);
+          });
+        }
         // console.log(this.formData)
+        // console.log(e)
+        this.$emit('tree-select', e, item.prop)
       });
     },
 
@@ -370,6 +410,7 @@ export default {
       });
     },
     onCancel: function () {
+      if (this.isSearch) this.onReset()
       this.$emit("cancel", this.searchForm);
     },
     handleImage: function (t, e, prop) {
@@ -412,5 +453,9 @@ export default {
 
 ::v-deep .img-upload-disabled .el-upload--picture-card {
   display: none;
+}
+
+::v-deep .el-input.is-disabled .el-input__inner {
+  color: gray;
 }
 </style>
