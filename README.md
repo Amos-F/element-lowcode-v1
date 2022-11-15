@@ -1,19 +1,19 @@
 # element-lowcode-v1
 
-> 本项目主要是为了节约开发人员重复的书写form表单和table表格代码的时间而开发的一套针对Element-ui for vue2 的低代码组件
+> 本项目主要是为了节约开发人员重复的书写form表单和table表格代码的时间而开发的一套针对`Element-ui for vue2` 的低代码高可复用性组件
 >
 > 项目依赖：
 >
 > ​	1.`element-ui@vue2`官网： [https://element.eleme.cn/](https://element.eleme.cn/)
 > ​	2.`moment`官网： [http://momentjs.cn/](http://momentjs.cn/)
 
-## Project setup
+## Project setup 安装依赖
 
 ```bash
 npm install -S element-lowcode-v1
 ```
 
-# UseAge
+# UseAge 使用
 
 
 
@@ -214,7 +214,8 @@ export default {
 | label         | form表单字段的label                                          | String  | 否       |              |                                   |
 | width         | `el-form-item`的lable宽度，权重高于外层`labelWidth`          | String  | 否       |              |                                   |
 | itemWidth     | `el-form-item`除lable外区域的宽度                            | String  | 否       |              | 100%                              |
-| noAll         | 是否不展示`全部`选项，当type是radio或checkbox 时有效         | Boolean |          |              |                                   |
+| noAll         | 是否不展示`全部`选项，当type是`select` 时有效                | Boolean |          |              |                                   |
+| textAll       | `全部`选项默认展示文字                                       | String  | 否       |              | 全部                              |
 | renderVal     | 当type的值是radio / checkbox / select 的时候需要渲染控件上的选择项，详见`renderVal`说明 | Array   |          |              |                                   |
 | valueFormat   | `el-date-picker`组件的格式化                                 | String  | 否       |              | yyyy-MM-dd HH:mm:ss  / yyyy-MM-dd |
 | momentFormat  | moment插件中的格式化配置                                     | String  | 否       |              | YYYY-MM-DD HH:mm:ss               |
