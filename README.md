@@ -255,12 +255,22 @@ if(valIf == forms[propIf] || valOr == forms[propIf]){
 >说明：type可选值为 text / textarea / number / txt / img / daterange / datetimerange / monthrange / date /datetime / radio / checkbox / select / image-upload / tree-select
 >
 >1. `text / textarea / number` 分别对应`el-input`的type类型
->2.  `/ daterange / datetimerange / monthrange / date /datetime` 分别对应 `el-date-picker`类型
+>2. `/ daterange / datetimerange / monthrange / date /datetime` 分别对应 `el-date-picker`类型
 >3. `radio`和`checkbox` 分别对应 `el-radio-group` 和 `el-checkbox-group`
 >4. `select` 对应 `el-select`
 >5. `tree-select` 对应 `el-cascader`
 >6. `image-upload` 对应 `el-upload`组件
 >7. `txt`则输出span 文本
+
+### btns Attributes
+
+| 参数  | 说明                                                         | 类型   | 是否必填 | 可选值                             | 默认值 |
+| ----- | ------------------------------------------------------------ | ------ | -------- | ---------------------------------- | ------ |
+| type  | `el-button`的type值                                          | String | 否       | primary/info/sucess/warning/danger |        |
+| text  | 按钮的文本                                                   | String | 否       |                                    |        |
+| event | 按钮点击触发的事件需要再lc-form`@定义事件名`接收，如：{event:'add'}则需要@add="funcAdd" | String | 否       |                                    |        |
+
+
 
 ### renderVal Attributes
 

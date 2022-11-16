@@ -63,8 +63,9 @@
                 :remote-method="e => remoteMethod(e, item.prop)" :loading="remoteLoading"
                 @change="e => selectChange(e, item.renderProp || item.prop)" :allow-create="item.allowCreate"
                 :default-first-option="item.defaultFirstOption" :clearable="item.clearable">
-                <el-option label="全部" value="" v-if="!item.noAll"></el-option>
-                <el-option v-for="(ite, ind) in item.renderVal" :key="ind" :label="ite.title" :value="ite.label"
+                <el-option :label="item.textAll || '全部'" value="" v-if="!item.noAll"></el-option>
+                <el-option v-for="(ite, ind) in item.renderVal" :key="ind"
+                  :label="ite[item.kv ? item.kv.title : 'title']" :value="ite[item.kv ? item.kv.label : 'label']"
                   :disabled="ite.disabled">
                 </el-option>
               </el-select>
